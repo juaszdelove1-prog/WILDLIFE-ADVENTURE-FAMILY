@@ -1,0 +1,20 @@
+name = "wildlife-adventure-family"
+compatibility_date = "2026-09-17"
+main = "./src/worker.ts"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "wildlife_adventure_content"
+database_name = "wildlife-adventure-content"
+database_id = "ebb63c56-cf12-4beb-bf43-302b35997c27"
+
+[[r2_buckets]]
+binding = "wildlife_adventure_media"
+bucket_name = "wildlife-adventure-media"
+
+[[routes]]
+pattern = "nebrinonlineonesignal.com"
+custom_domain = true
