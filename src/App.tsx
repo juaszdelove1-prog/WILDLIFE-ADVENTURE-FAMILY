@@ -1,5 +1,5 @@
 import { ArrowUpRight, Bird, Compass, Leaf, Menu, Mountain, TreePine, UsersRound, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 const heroImage='https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=1600&q=85'
 const wildlifeImage='https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1400&q=85'
@@ -27,7 +27,23 @@ const discover=[
 ['Madini na Rasilimali','Utajiri wa rasilimali za Tanzania ukitazamwa kwa muktadha wa mazingira, jamii na uwajibikaji.'],
 ['Mazingira na Tabianchi','Misitu, maji, ardhi, mifumo ya ikolojia na hatua zinazosaidia kulinda mazingira kwa vizazi vijavyo.'],
 ]
+const publicPages: Record<string,{title:string;kicker:string;heading:string;intro:string;points:[string,string][]}> = {
+ '/about':{title:'Kuhusu Wildlife Adventure Family (WAF) Tanzania',kicker:'KUHUSU WAF',heading:'Wildlife Adventure Family',intro:'Wildlife Adventure Family (WAF) ni taasisi isiyo ya kiserikali ya Tanzania yenye eneo la shughuli la kitaifa. Tunakuza uhifadhi wa wanyamapori na mazingira, utalii endelevu, elimu na ushirikishwaji wa jamii.',points:[['Dira yetu','Tanzania yenye mifumo ya asili inayothaminiwa, inalindwa na kuendelezwa kwa manufaa ya vizazi vya sasa na vijavyo.'],['Namna tunavyofanya kazi','Tunaunganisha uhifadhi, elimu, jamii na utalii endelevu kwa mtazamo unaoheshimu mazingira na urithi wa Tanzania.']]},
+ '/conservation':{title:'Uhifadhi wa Wanyamapori na Mazingira | WAF Tanzania',kicker:'UHIFADHI',heading:'Uhifadhi wa Wanyamapori na Mazingira',intro:'WAF inakuza uhifadhi, ulinzi na usimamizi endelevu wa wanyamapori, makazi yao, mifumo ya ikolojia na rasilimali za asili Tanzania.',points:[['Bioanuwai na makazi','Tunatambua umuhimu wa kulinda makazi ya wanyamapori, misitu, vyanzo vya maji na mifumo nyeti ya ikolojia.'],['Elimu na jamii','Tunakuza uelewa kuhusu mazingira, mabadiliko ya tabianchi, bioanuwai na matumizi endelevu ya rasilimali za asili.']]},
+ '/sustainable-tourism':{title:'Utalii Endelevu Tanzania | Wildlife Adventure Family',kicker:'UTALII ENDELEVU',heading:'Utalii unaohifadhi asili na kuthamini jamii',intro:'WAF inakuza utalii unaowajibika, utalii wa jamii na eco-tourism unaochangia uhifadhi wa mazingira na maendeleo ya kijamii na kiuchumi.',points:[['Utalii unaowajibika','Tunasisitiza uzoefu wa utalii unaoheshimu mazingira, wanyamapori, tamaduni na jamii.'],['Fursa kwa jamii','Utalii endelevu unaweza kusaidia kujenga fursa za kijamii na kiuchumi huku ukihifadhi urithi wa asili na utamaduni.']]},
+ '/tanzania':{title:'Tanzania Yetu | Mazingira, Utamaduni na Urithi | WAF',kicker:'TANZANIA YETU',heading:'Tanzania: asili, jamii na urithi',intro:'Tanzania Yetu ni sehemu ya elimu na utambulisho kuhusu mazingira, wanyamapori, jamii, utamaduni na urithi kutoka maeneo mbalimbali nchini.',points:[['Mazingira na wanyamapori','Tunawasilisha maarifa kuhusu mifumo ya ikolojia, misitu, maji, ardhi na wanyamapori kwa maudhui yanayoandaliwa na kuhakikiwa kwa matumizi ya umma.'],['Jamii na urithi','Tunathamini historia, lugha, sanaa, maarifa na tamaduni za jamii kwa uandishi wenye heshima na usio na ubaguzi.']]},
+ '/news':{title:'Habari na Simulizi | Wildlife Adventure Family Tanzania',kicker:'HABARI & SIMULIZI',heading:'Habari kutoka Wildlife Adventure Family',intro:'Hapa ndipo WAF itachapisha taarifa za umma, elimu ya mazingira, simulizi za uhifadhi na taarifa za shughuli zilizoidhinishwa kwa matumizi ya umma.',points:[['Maudhui rasmi','Habari rasmi za WAF zitawekwa hapa baada ya kuhakikiwa na kuidhinishwa.'],['Uwazi wa maudhui','Hatuchapishi nyaraka za ndani, taarifa binafsi au taarifa za siri za taasisi.']]},
+ '/contact':{title:'Wasiliana na Wildlife Adventure Family (WAF) Tanzania',kicker:'WASILIANA NASI',heading:'Wasiliana na Wildlife Adventure Family',intro:'Makao Makuu: BUSWELU B Street, karibu na Buswelu Center, Buswelu Ward, Ilemela District, Mwanza Region. P.O. BOX 735.',points:[['Mwenyekiti','EMANUEL ABIHUDI SHOO — +255 714 707 202'],['Katibu Mtendaji','JOSEPH AUGUSTINO MTEGA — +255 753 305 709'],['Mhasibu','KAGURI C. KAGURI — +255 748 287 628'],['Msaada wa Kimtandao & Kimfumo','JUSTINE A. MWALUSAKO — +255 743 749 792']]}
+}
+
+function PublicPage({page}:{page:(typeof publicPages)[string]}){
+ useEffect(()=>{document.title=page.title; window.scrollTo(0,0)},[page.title])
+ return <main className="public-page"><div className="topline"><span>Pamoja kwa Mazingira Bora, Utalii Endelevu na Maendeleo ya Jamii</span></div><nav className="ref-nav"><a className="brand" href="/"><span className="brand-logo-wrap"><img className="brand-logo" src="/waf-logo.jpg" alt="Wildlife Adventure Family logo"/></span><span><b>WILDLIFE ADVENTURE FAMILY</b><small>Protecting Our Wildlife, Empowering Communities</small></span></a><div className="links"><a href="/">Nyumbani</a><a href="/about">Kuhusu Sisi</a><a href="/conservation">Uhifadhi</a><a href="/sustainable-tourism">Utalii Endelevu</a><a href="/tanzania">Tanzania Yetu</a><a href="/news">Habari</a><a href="/contact">Wasiliana Nasi</a></div></nav><header className="page-hero"><p className="kicker">{page.kicker}</p><h1>{page.heading}</h1><p>{page.intro}</p></header><section className="page-content"><div className="page-grid">{page.points.map(([t,d])=><article key={t}><h2>{t}</h2><p>{d}</p></article>)}</div><a className="cta gold" href="/">Rudi Nyumbani <ArrowUpRight size={18}/></a></section><footer className="mini-footer"><img src="/waf-logo.jpg" alt="WAF"/><div><b>WILDLIFE ADVENTURE FAMILY</b><p>Protecting Our Wildlife, Empowering Communities</p></div></footer></main>
+}
+
 export default function App(){
+ const page=publicPages[window.location.pathname]
+ if(page) return <PublicPage page={page}/>
  const [open,setOpen]=useState(false)
  const [query,setQuery]=useState('')
  const filteredCommunities=useMemo(()=>communities.filter(c=>`${c.name} ${c.area} ${c.topic} ${c.summary}`.toLowerCase().includes(query.toLowerCase())),[query])
