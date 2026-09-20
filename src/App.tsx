@@ -37,7 +37,29 @@ const publicPages: Record<string,{title:string;kicker:string;heading:string;intr
 }
 
 function PublicPage({page}:{page:(typeof publicPages)[string]}){
- useEffect(()=>{document.title=page.title; window.scrollTo(0,0)},[page.title])
+ useEffect(()=>{
+   document.title=page.title
+   const path=window.location.pathname
+   const canonicalUrl=`https://nebrinonlineonesignal.com${path}`
+   const description=page.intro
+   const setMeta=(selector:string,attrs:Record<string,string>)=>{
+     let el=document.head.querySelector(selector) as HTMLMetaElement | null
+     if(!el){ el=document.createElement('meta'); document.head.appendChild(el) }
+     Object.entries(attrs).forEach(([k,v])=>el!.setAttribute(k,v))
+   }
+   setMeta('meta[name="description"]',{name:'description',content:description})
+   setMeta('meta[property="og:title"]',{property:'og:title',content:page.title})
+   setMeta('meta[property="og:description"]',{property:'og:description',content:description})
+   setMeta('meta[property="og:url"]',{property:'og:url',content:canonicalUrl})
+   let canonical=document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null
+   if(!canonical){ canonical=document.createElement('link'); canonical.rel='canonical'; document.head.appendChild(canonical) }
+   canonical.href=canonicalUrl
+   const old=document.getElementById('waf-page-schema'); if(old) old.remove()
+   const schema=document.createElement('script'); schema.id='waf-page-schema'; schema.type='application/ld+json'
+   schema.text=JSON.stringify({'@context':'https://schema.org','@type':'WebPage',name:page.title,url:canonicalUrl,description,isPartOf:{'@type':'WebSite',name:'Wildlife Adventure Family',url:'https://nebrinonlineonesignal.com/'},about:{'@type':'NGO',name:'Wildlife Adventure Family'}})
+   document.head.appendChild(schema)
+   window.scrollTo(0,0)
+ },[page.title,page.intro])
  return <main className="public-page"><div className="topline"><span>Pamoja kwa Mazingira Bora, Utalii Endelevu na Maendeleo ya Jamii</span></div><nav className="ref-nav"><a className="brand" href="/"><span className="brand-logo-wrap"><img className="brand-logo" src="/waf-logo.jpg" alt="Wildlife Adventure Family logo"/></span><span><b>WILDLIFE ADVENTURE FAMILY</b><small>Protecting Our Wildlife, Empowering Communities</small></span></a><div className="links"><a href="/">Nyumbani</a><a href="/about">Kuhusu Sisi</a><a href="/conservation">Uhifadhi</a><a href="/sustainable-tourism">Utalii Endelevu</a><a href="/tanzania">Tanzania Yetu</a><a href="/news">Habari</a><a href="/contact">Wasiliana Nasi</a></div></nav><header className="page-hero"><p className="kicker">{page.kicker}</p><h1>{page.heading}</h1><p>{page.intro}</p></header><section className="page-content"><div className="page-grid">{page.points.map(([t,d])=><article key={t}><h2>{t}</h2><p>{d}</p></article>)}</div><a className="cta gold" href="/">Rudi Nyumbani <ArrowUpRight size={18}/></a></section><footer className="mini-footer"><img src="/waf-logo.jpg" alt="WAF"/><div><b>WILDLIFE ADVENTURE FAMILY</b><p>Protecting Our Wildlife, Empowering Communities</p></div></footer></main>
 }
 
